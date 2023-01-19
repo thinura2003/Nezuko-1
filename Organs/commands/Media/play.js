@@ -9,29 +9,16 @@ module.exports={
     usage:`${prefa}play <query>`,
     desc:"Plays the song...",
     category:"Media",
-    react:"✅",
     start:async(client,m,{command,prefix,text,args})=>{
                
-if(!text) return client.sendMessage(m.from,{text:"What you want to play"},{quoted:m})
-let yts = require("yt-search")
-        let search = await yts(text)
+if(!text) return  client.sendMessage(m.from,{text:"What you want to play"},{quoted:m})
+       client.sendMessage(m.from,{text:"\nDownloading your song*\n"},{quoted:m})
+        let yts = require("yt-search")
+         let search = await yts(text)
         let anu = search.videos[0]
 const pl= await YT.mp3(anu.url)
-await client.sendMessage(m.from,{
-    audio: fs.readFileSync(pl.path),
-    fileName: anu.title + '.mp3',
-    mimetype: 'audio/mpeg',
-    contextInfo:{
-        externalAdReply:{
-            title:anu.title,
-            body: "*©Eternity-Team*",
-            thumbnail: await fetchBuffer(pl.meta.image),
-            mediaType:2,
-            mediaUrl:anu.url,
-        }
+if(!text) return client.sendMessage(m.from,{text:"\n*Uploading your song....*\n"})
+client.sendMessage(m.chat, { audio: { url: pl.path }, mimetype: 'audio/mpeg', fileName: `${anu.title}.mp3` }, { quoted: m })
 
-    },
-},{quoted:m})
-await fs.unlinkSync(pl.path)
     }
 }
